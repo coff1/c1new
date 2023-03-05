@@ -18,7 +18,4 @@ target 可以是string 可以是txt文件，支持ip，域名，公司名
 
 source/config 配置钉钉，fofa......  
 
-![image](https://github.com/coff1/c1new/blob/main/img/-h.png)  
-![image](https://github.com/coff1/c1new/blob/main/img/1.png)  
-![image](https://github.com/coff1/c1new/blob/main/img/2.png)  
-![image](https://github.com/coff1/c1new/blob/main/img/3.png)  
+![image](https://github.com/coff1/c1new/blob/main/img/-h.png)   
