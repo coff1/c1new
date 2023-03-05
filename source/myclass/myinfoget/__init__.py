@@ -88,7 +88,7 @@ class myinfoget(myurl,myrequests):
 
     # 提取网站标题
     def get_title(self)->str:
-        soup = BeautifulSoup(self.content, 'html.parser')
+        soup = BeautifulSoup(self.text, 'html.parser')
         try:
             return soup.title.string
         except BaseException:
