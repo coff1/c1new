@@ -112,10 +112,5 @@ class mydb:
 
 
 
-if __name__ == "__main__":
-    x=mydb()
-    x.insert_or_update_table("ip_info",{"ip_address":2})
-    print(x.query_sqlite_with_parameter("select * from ip_info",order_by="ip_address",the_filter={"ip_address":3}))
-
 
 

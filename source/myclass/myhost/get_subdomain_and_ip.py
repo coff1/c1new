@@ -17,7 +17,11 @@ def get_subdomain_and_ip(domain):
         mylog().info(message)
         
     with concurrent.futures.ThreadPoolExecutor(max_workers=300) as executor:
-        subdomains = get_subdomain(domain)
+        from source.config import config
+        if config.get_subdomain:
+            subdomains = get_subdomain(domain)
+        else:
+            subdomains = [domain]
         mylog().info("resolve {} subdomains of {}".format(len(subdomains),domain))
         for subdomain in subdomains:
             executor.submit(get_ip, subdomain)

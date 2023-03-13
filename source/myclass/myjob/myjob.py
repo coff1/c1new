@@ -30,13 +30,14 @@ class myjob:
                     "select target from task where id = {}".format(self.id)
                     )["result"][0][0].split("\t")
                 )
-            print(self.target_list.my_list)
+            # print(self.target_list.my_list)
             self.company_s = self.target_list.extract_company_from_list()
             self.ip_s = self.target_list.extract_ip_from_list()
             self.domain_s = self.target_list.extract_domain_from_list()
             self.url_s = self.target_list.extract_url_from_list()
             self.all_target = mylist().concat_lists_without_add(
                 self.company_s, self.domain_s, self.ip_s, self.url_s)
+
 
 
     # 用时间戳生成任务id
@@ -66,6 +67,7 @@ class myjob:
 
     # 开始运行
     def do_job(self):
+        config.task_id = self.id
         self.write_task_to_db()  # 将任务写入数据库
         self.describe = "crawler "+self.describe
         send_message_to_dingding("任务开始!\nid:{}\ntarget:{}".format(self.id,self.all_target))

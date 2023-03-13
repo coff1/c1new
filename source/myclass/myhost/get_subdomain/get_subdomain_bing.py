@@ -32,7 +32,3 @@ def get_subdomains_bing(domain, num_pages=8):
         message = "get subdomain from bing fail: {}".format(domain)
         mylog().error(message)
         return {"subdomains":[], "urls":[]}
-
-if __name__ =="__main__":
-    subdomains = get_subdomains_bing('usc.edu.cn')
-    print(subdomains)

@@ -1,3 +1,4 @@
+# coding： utf8
 import re
 class mylist:
     def __init__(self,*lists) -> None:
@@ -104,9 +105,3 @@ class mylist:
         return [item for item in self.my_list if judge_is_domain(item)]
 
 
-
-# if __name__ == "__main__":
-#     x=mylist()
-#     print(x.extract_ip_from_list(["1.1.1.1","http://192.168.1.1:8000"]))
-#     print(x.out_one_from_list())
-#     print(x.get_my_list_new())

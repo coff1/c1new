@@ -14,7 +14,7 @@ def get_subdomain(domain)->list:
     # 获取子域名，包含爆破方式
     def get_subdomain_by_brute(domain)->list:
         dns_servers=None
-        max_workers=1000
+        # max_workers=100
         subdomains = set()
         subdomains_list=mylist().read_list(config.path_subdomain_dict)
         # subdomains_list = ["www", "mail", "ftp", "api", "admin"]
@@ -38,7 +38,7 @@ def get_subdomain(domain)->list:
         
         #判断是否被泛解析
         impossible_subdomains_to_resolve = ["{}.{}".format(subdomain, domain) for subdomain in impossible_subdomains_list]
-        with concurrent.futures.ThreadPoolExecutor(max_workers=max_workers) as executor:
+        with concurrent.futures.ThreadPoolExecutor(max_workers=300) as executor:
             futures = [executor.submit(resolve_subdomain, subdomain) for subdomain in impossible_subdomains_to_resolve]
             concurrent.futures.wait(futures)
         if len(subdomains) > 0:
@@ -48,7 +48,7 @@ def get_subdomain(domain)->list:
         # Generate list of subdomains to resolve
         subdomains_to_resolve = ["{}.{}".format(subdomain, domain) for subdomain in subdomains_list]
 
-        with concurrent.futures.ThreadPoolExecutor(max_workers=max_workers) as executor:
+        with concurrent.futures.ThreadPoolExecutor(max_workers=300) as executor:
             futures = [executor.submit(resolve_subdomain, subdomain) for subdomain in subdomains_to_resolve]
             concurrent.futures.wait(futures)
 

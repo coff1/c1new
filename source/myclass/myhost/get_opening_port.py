@@ -1,9 +1,11 @@
 from .the_modules import *
 from source.myclass.mydb import mydb
+from source.config import config
 
 def get_opening_port(host):
+    if config.scan_port:
         # 端口扫描的最大线程
-        max_workers=300
+        # max_workers=30
         # 端口扫描列表
         ports_will_test = [22,3389,445,3306,1433,1521,21,27017,11211,5432,23,25,465,110,995,143,993,5900,6379]
 
@@ -24,10 +26,12 @@ def get_opening_port(host):
                     pass
             return (port, False)
         open_ports = []
-        with ThreadPoolExecutor(max_workers=max_workers) as executor:
+        with ThreadPoolExecutor(max_workers=50) as executor:
             futures = [executor.submit(scan_port, host , port) for port in ports_will_test]
             for future in as_completed(futures):
                 port, status = future.result()
                 if status:
                     open_ports.append(str(port))
         return open_ports
+    else:
+        return []

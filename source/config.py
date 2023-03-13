@@ -1,5 +1,14 @@
 import time
 class config:
+    # 线程数，根据服务器性能选择合适数量
+    works_scan_port = 300
+    
+
+    # 是否收集子域名，适合子域名收集完成的情况
+    get_subdomain = True
+    scan_port = False
+ 
+
     # fofa email and api_key
     fofa_email = ""
     fofa_key = ""
@@ -8,7 +17,7 @@ class config:
     securitytrails_api_key = ''
     # 启用站点爬虫？true or flase
     do_crawler = True
-
+    
     # 字典目录
     path_subdomain_dict="source/mydict/subdomain.txt"
 
@@ -18,7 +27,7 @@ class config:
     webhook = ''
 
     # 爬虫深度，太大容易被封
-    crawler_depth = 2
+    crawler_depth = 1
 
 
 
@@ -38,3 +47,6 @@ class config:
     allow_redirects = True
 
     # 输出时间
+
+    # 保存当前任务id
+    task_id = None

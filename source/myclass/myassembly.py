@@ -108,32 +108,35 @@ class myassembly:
 
     # 获取某个域名或者ip的存活站点，原理：根据host创建一些url，直接丢到爬虫
     def get_website_of_subdomain(self,subdomain):
-        urls=list()
-        protocol=["http","https"]
-        # 端口字典，注意不要把80和443加进去
-        port=['','8080','8090','8888','5003']
+        # 临时改动
+        if config.do_crawler:
+            urls=list()
+            protocol=["http","https"]
+            # 端口字典，注意不要把80和443加进去
+            port=['','8080','8090','8888','5003']
 
-        # 加载端口字典
-        port_dict=mydb().query_sqlite("select distinct port  from port_dict")['result']
-        for i in port_dict:
-            if i[0] not in port and i[0] not in ['80','443','3389','3306','22']:
-                port.append(i[0])
+            # 加载端口字典
+            port_dict=mydb().query_sqlite("select distinct port  from port_dict")['result']
+            for i in port_dict:
+                if i[0] not in port and i[0] not in ['80','443','3389','3306','22']:
+                    port.append(i[0])
 
-        for i in protocol:
-            for j in port:
-                if j == '':
-                    urls.append(i+"://"+subdomain)
-                else:
-                    urls.append(i+"://"+subdomain+":"+j)
-        # urls.append("https://101.34.85.116:5003/login")
-        self.get_info_of_url_s(urls)
+            for i in protocol:
+                for j in port:
+                    if j == '':
+                        urls.append(i+"://"+subdomain)
+                    else:
+                        urls.append(i+"://"+subdomain+":"+j)
+            # urls.append("https://101.34.85.116:5003/login")
+            self.get_info_of_url_s(urls)
+        pass
         
     # 获取多个域名或者ip的存活站点
     def get_website_of_subdomain_s(self,subdomains):
         # for subdomain in subdomains:
         #     self.get_website_of_subdomain(subdomain)
 
-        with ThreadPoolExecutor(max_workers=300) as executor:
+        with ThreadPoolExecutor(max_workers=10) as executor:
             for subdomain in mylist(subdomains).my_list:
                 executor.submit(self.get_website_of_subdomain, subdomain)    
 
@@ -141,24 +144,25 @@ class myassembly:
 
 
     # 获取ip的信息，包括ip信息和站点
-    def get_info_of_ip(self,ip):
+    def get_info_of_ip(self,ip,do_get_site=True):
         x=myhost(ip)
         db=mydb()
         db.insert_or_update_table("ip",{
                 "ip":ip,
                 "port":"\t".join(x.get_opening_port())
             })
-        self.get_website_of_subdomain(ip)
+        if do_get_site:
+            self.get_website_of_subdomain(ip)
 
 
     #################ips入口点
     # 获取多个ip的信息，包括ip信息和站点
-    def get_info_of_ip_s(self,ip_s):
+    def get_info_of_ip_s(self,ip_s,do_get_site=True):
         # for ip in ip_s:
         #     self.get_info_of_ip(ip)
-        with ThreadPoolExecutor(max_workers=300) as executor:
+        with ThreadPoolExecutor(max_workers=50) as executor:
             for ip in mylist(ip_s).my_list:
-                executor.submit(self.get_info_of_ip, ip)
+                executor.submit(self.get_info_of_ip, ip,do_get_site)
 
 
 
@@ -183,13 +187,16 @@ class myassembly:
             })
         
         self.get_website_of_subdomain_s(subdomain)
-        self.get_info_of_ip_s(ip)
+        self.get_info_of_ip_s(ip,do_get_site=False)
 
     #################domains入口点
     # 获取多个域名的信息
     def get_info_of_domain_s(self,domain_s):
-        for doamin in domain_s:
-            self.get_info_of_domain(doamin)
+        # for doamin in domain_s:
+        #     self.get_info_of_domain(doamin)
+        with ThreadPoolExecutor(max_workers=30) as executor:
+            for domain in domain_s:
+                executor.submit(self.get_info_of_domain, domain)  
 
 
 
@@ -198,6 +205,7 @@ class myassembly:
     def get_info_of_company(self,company):
         mylog().info("get info of company {}".format(company))
         icp_of_company = myhost(company).get_icp_info_of_host()
+        # print(icp_of_company)
         domain_of_company=list()
         for i in icp_of_company:
             x=mydb()
@@ -216,6 +224,5 @@ class myassembly:
     def get_info_of_company_s(self,companys):
         for company in companys:
             self.get_info_of_company(company)
-        # with ThreadPoolExecutor(max_workers=300) as executor:
-        #     for company in mylist(companys).my_list:
-        #         executor.submit(self.get_info_of_company, company)
+            import time
+            time.sleep(10)

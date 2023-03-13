@@ -12,6 +12,8 @@ from source.myclass.mylog import mylog
 def send_message_to_dingding(message):
     # 没配置会引起异常而跳过
     try:
+        if len(str(message))>500:
+            message=str(message)[:500]+"......"
         timestamp = str(round(time.time() * 1000))
         secret = config.secret
         secret_enc = secret.encode('utf-8')

@@ -19,7 +19,7 @@ def save_query_results_to_excel(field_names_list, field_values_list, file_name="
 
     # Loop through the query results
     for i, (field_names, field_values) in enumerate(zip(field_names_list, field_values_list)):
-        print(i)
+        # print(i)
 
         # Create a new worksheet for the query result
         try:

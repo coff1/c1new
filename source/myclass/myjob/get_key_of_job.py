@@ -68,7 +68,7 @@ def get_key_of_job(id) -> list:
     def get_key_of_company_s(task_company):
         sql = """select domain from domain where company in ("""
         sql += ",".join(["'{}'".format(i) for i in task_company])+")"
-        print(sql)
+        # print(sql)
 
         domain_key = [i[0] for i in mydb().query_sqlite(sql)["result"]]
 
@@ -81,7 +81,7 @@ def get_key_of_job(id) -> list:
         """
         sql = sql + \
             ",".join(["'{}'".format(i) for i in mylist(task_company,domain_key).my_list])+")"
-        
+
         ip_key = [i[0] for i in mydb().query_sqlite(sql)["result"]]
 
         sql = """
@@ -108,10 +108,13 @@ def get_key_of_job(id) -> list:
 
     def get_key_of_domain_s(task_domain):
         sql = """
-            SELECT distinct ip from subdomain where 
+            SELECT distinct ip from subdomain where domain in (
         """
-        sql = sql + " or ".join(["domain = '{}'".format(i)
-                                for i in task_domain])
+        # sql = sql + " or ".join(["domain = '{}'".format(i)
+        #                         for i in task_domain])
+        sql = sql + \
+            ",".join(["'{}'".format(i) for i in mylist(task_domain).my_list])+")"
+        
         ip_key = [i[0] for i in mydb().query_sqlite(sql)["result"]]
 
         domain_key = task_domain
@@ -150,6 +153,7 @@ def get_key_of_job(id) -> list:
     sql = """
         select target from task where id = {}
     """.format(id)
+    
     task = (mydb().query_sqlite(sql)["result"][0][0]).split("\t")
     task = mylist(task)
     task_key = mylist()
@@ -169,5 +173,5 @@ def get_key_of_job(id) -> list:
     if len(task_ip) > 0:
         task_key.concat_lists(get_key_of_ip_s(task_ip))
 
-    print(task_key.my_list)
+    # print(task_key.my_list)
     return task_key.my_list

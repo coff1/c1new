@@ -6,16 +6,13 @@ def write_done_to_db(id):
     #  返回任务在数据库内的数据量
     def count_of_job():
         key = get_key_of_job(id)
-        sql_domain = "select count(*) from domain where " + \
-            " or ".join(["domain = '{}'".format(i) for i in key])
-        sql_subdomain = "select count(*) from subdomain where " + \
-            " or ".join(["domain = '{}'".format(i) for i in key])
-        sql_ip = "select count(*) from ip where " + \
-            " or ".join(["ip = '{}'".format(i) for i in key])
-        sql_url = "select count(*) from url where " + \
-            " or ".join(["host like '%{}%'".format(i) for i in key])
-        sql_sensitiveinfo = "select count(*) from sensitiveinfo where "+" or ".join([
-            "url like '%{}%'".format(i) for i in key])
+        str_temp= ("','").join(key)
+        list_key_str = f"('{str_temp}')"
+        sql_domain = f"select count(*) from domain where domain in {list_key_str}"
+        sql_subdomain = f"select count(*) from subdomain where domain in {list_key_str}" 
+        sql_ip = f"select count(*) from ip where ip in {list_key_str}"
+        sql_url = f"select count(*) from url where url in {list_key_str}"
+        sql_sensitiveinfo = f"select count(*) from sensitiveinfo where url in {list_key_str}"
         count = 0
         for i in [sql_url, sql_domain, sql_ip, sql_sensitiveinfo, sql_subdomain]:
             # print(i)
@@ -27,16 +24,14 @@ def write_done_to_db(id):
     #  返回任务在数据库内新的数据量
     def count_of_job_new():
         key = get_key_of_job(id)
-        sql_domain = "select count(*) from domain where ("+" or ".join(
-            ["domain = '{}'".format(i) for i in key])+") and is_new = 1"
-        sql_subdomain = "select count(*) from subdomain where ("+" or ".join(
-            ["domain = '{}'".format(i) for i in key])+") and is_new = 1"
-        sql_ip = "select count(*) from ip where ("+" or ".join(
-            ["ip = '{}'".format(i) for i in key])+") and is_new = 1"
-        sql_url = "select count(*) from url where ("+" or ".join(
-            ["host like '%{}%'".format(i) for i in key])+") and is_new = 1"
-        sql_sensitiveinfo = "select count(*) from sensitiveinfo where ("+" or ".join(
-            ["url like '%{}%'".format(i) for i in key])+") and is_new = 1"
+        key = get_key_of_job(id)
+        str_temp= ("','").join(key)
+        list_key_str = f"('{str_temp}')"
+        sql_domain = f"select count(*) from domain where domain in {list_key_str} and is_new = 1"
+        sql_subdomain = f"select count(*) from subdomain where domain in {list_key_str} and is_new = 1" 
+        sql_ip = f"select count(*) from ip where ip in {list_key_str} and is_new = 1"
+        sql_url = f"select count(*) from url where url in {list_key_str} and is_new = 1"
+        sql_sensitiveinfo = f"select count(*) from sensitiveinfo where url in {list_key_str} and is_new = 1"
         count = 0
         for i in [sql_url, sql_domain, sql_ip, sql_sensitiveinfo, sql_subdomain]:
             n = mydb().query_sqlite(i)["result"][0][0]

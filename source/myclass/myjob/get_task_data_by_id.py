@@ -26,7 +26,7 @@ def get_task_data_by_id(id)->dict:
     sql_ip = "select * from ip  where ip in (" + \
         ",".join(["'"+i+"'" for i in key])+") order by ip"
     
-    print(sql_ip)
+    # print(sql_ip)
     sql_url = "select * from url where host in (" + \
         ",".join(["'"+i+"'" for i in key])+") order by host,length(url) "
     

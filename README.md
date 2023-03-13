@@ -8,7 +8,7 @@
   站点铭感信息爬虫  
 用法
 1，python c1new.py -t target
-target 可以是string 可以是txt文件，支持ip，域名，公司名
+target 可以是string 可以是txt文件，支持ip，域名，公司名，url
 
 2，python 从new.py -s all
 显示任务id
